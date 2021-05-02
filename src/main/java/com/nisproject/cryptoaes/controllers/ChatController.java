@@ -27,7 +27,7 @@ public class ChatController {
 
 	@MessageMapping("/chat")
 	public void processMessage(@Payload ChatMessageRequest messageRequest) {
-		System.out.println(messageRequest);
+//		System.out.println(messageRequest);
 		UserEntity userEntityS = userRepo.findByUserId(messageRequest.getSenderId());
 		UserEntity userEntityR = userRepo.findByUserId(messageRequest.getRecipientId());
 		ChatEntity chatEntity = new ChatEntity();

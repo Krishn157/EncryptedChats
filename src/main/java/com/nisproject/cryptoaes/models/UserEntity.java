@@ -45,11 +45,20 @@ public class UserEntity implements Serializable {
 	@JsonIgnore
 	private List<ChatEntity> messagesR;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userId1")
+	@JsonIgnore
+	private List<KeyEntity> keyUser1;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userId2")
+	@JsonIgnore
+	private List<KeyEntity> keyUser2;
+
 	public UserEntity() {
 	}
 
 	public UserEntity(Long id, @Size(min = 4, message = "UserId should be at least 4 characters") String userId,
-			String pin, String encryptedPassword, List<ChatEntity> messagesS, List<ChatEntity> messagesR) {
+			String pin, String encryptedPassword, List<ChatEntity> messagesS, List<ChatEntity> messagesR,
+			List<KeyEntity> keyUser1, List<KeyEntity> keyUser2) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -57,6 +66,8 @@ public class UserEntity implements Serializable {
 		this.encryptedPassword = encryptedPassword;
 		this.messagesS = messagesS;
 		this.messagesR = messagesR;
+		this.keyUser1 = keyUser1;
+		this.keyUser2 = keyUser2;
 	}
 
 	public Long getId() {
@@ -105,6 +116,22 @@ public class UserEntity implements Serializable {
 
 	public void setMessagesR(List<ChatEntity> messagesR) {
 		this.messagesR = messagesR;
+	}
+
+	public List<KeyEntity> getKeyUser1() {
+		return keyUser1;
+	}
+
+	public void setKeyUser1(List<KeyEntity> keyUser1) {
+		this.keyUser1 = keyUser1;
+	}
+
+	public List<KeyEntity> getKeyUser2() {
+		return keyUser2;
+	}
+
+	public void setKeyUser2(List<KeyEntity> keyUser2) {
+		this.keyUser2 = keyUser2;
 	}
 
 	public static long getSerialversionuid() {
