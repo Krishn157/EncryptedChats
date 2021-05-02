@@ -31,7 +31,7 @@ public class BlowFishUtil {
 
 			byte[] keyBytes = sharedKey.getBytes(charSet);
 			SecretKeySpec secretkey = new SecretKeySpec(keyBytes, "Blowfish");
-			cipher = Cipher.getInstance("Blowfish");
+			cipher = Cipher.getInstance("Blowfish/ECB/NoPadding");
 			cipher.init(Cipher.DECRYPT_MODE, secretkey);
 			byte[] decryptedFinal = cipher.doFinal(decodedBytes);
 			return new String(decryptedFinal);
