@@ -12,12 +12,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.management.RuntimeErrorException;
+
 import com.nisproject.cryptoaes.models.KeyEntity;
 import com.nisproject.cryptoaes.models.UserEntity;
 import com.nisproject.cryptoaes.repositories.KeyRepo;
 import com.nisproject.cryptoaes.repositories.UserRepo;
 import com.nisproject.cryptoaes.utils.AES128Util;
 import com.nisproject.cryptoaes.utils.BlowFishUtil;
+import com.nisproject.cryptoaes.utils.TripleDES;
 
 @RestController
 @RequestMapping("keys")
@@ -38,6 +48,9 @@ public class KeyController {
 	@Autowired
 	private AES128Util aes128;
 
+	@Autowired
+	private TripleDES tripleDES;
+
 	@Value("${flaskUrl}")
 	private String url;
 
@@ -47,6 +60,9 @@ public class KeyController {
 	@GetMapping("/")
 	public String getUsersSharedKey(@RequestParam("user_1") String currUser,
 			@RequestParam("user_2") String secondUser) {
+
+		if (currUser.equals(secondUser))
+			throw new RuntimeErrorException(null, "Same user");
 		KeyEntity keyEntity = keyRepo.findKeyOfUsers(currUser, secondUser);
 		UserEntity user1 = userRepo.findByUserId(currUser);
 		String quantumKey = null;
@@ -76,7 +92,15 @@ public class KeyController {
 		// getCurrUserPin
 		String currUserPin = user1.getPin();
 		// encrypt using aes-128
-		String finalKey = aes128.encrypt(quantumKey, currUserPin);
+		// String finalKey = aes128.encrypt(quantumKey, currUserPin);
+		String finalKey = "";
+		try {
+			finalKey = tripleDES.encrypt(quantumKey, currUserPin);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | UnsupportedEncodingException | NoSuchPaddingException
+				| IllegalBlockSizeException | BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// return key
 		return finalKey;
 	}
