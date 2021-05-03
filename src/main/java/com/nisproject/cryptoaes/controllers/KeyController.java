@@ -54,7 +54,8 @@ public class KeyController {
 			throw new RuntimeErrorException(null, "Same user");
 		KeyEntity keyEntity = keyRepo.findKeyOfUsers(currUser, secondUser);
 		UserEntity user1 = userRepo.findByUserId(currUser);
-		String finalKey = null;
+		UserEntity user2 = userRepo.findByUserId(secondUser);
+		String quantumKey = null;
 		if (keyEntity == null) {
 
 			// call to flask api
@@ -65,20 +66,28 @@ public class KeyController {
 			String encryptedQuantumKey = respEntity.getBody();
 			System.out.println("encrypted qunatum key is " + encryptedQuantumKey);
 			// decrypt(blowfish)
-			String quantumKey = blowFish.decrypt(encryptedQuantumKey);
+			quantumKey = blowFish.decrypt(encryptedQuantumKey);
 			// setKeyEntitySave
 			// save to db
-			UserEntity user2 = userRepo.findByUserId(secondUser);
-			finalKey = hmacSha256.calcHmacSha256(quantumKey, user1.getPin() + user2.getPin());
 			KeyEntity keyEntitySave = new KeyEntity();
-			keyEntitySave.setSharedKey(finalKey);
+			keyEntitySave.setSharedKey(quantumKey);
 			keyEntitySave.setUserId1(user1);
 			keyEntitySave.setUserId2(user2);
 			keyRepo.save(keyEntitySave);
+			String hashKey = user1.getPin() + user2.getPin();
+			String finalKey = hmacSha256.calcHmacSha256(quantumKey, hashKey);
+			return finalKey;
 		} else {
-			finalKey = keyEntity.getSharedKey();
+			quantumKey = keyEntity.getSharedKey();
+			String hashKey = null;
+			if (keyEntity.getUserId1().getUserId().equals(user1.getUserId())) {
+				hashKey = user1.getPin() + user2.getPin();
+			} else {
+				hashKey = user2.getPin() + user1.getPin();
+			}
+			String finalKey = hmacSha256.calcHmacSha256(quantumKey, hashKey);
+			return finalKey;
 		}
-		return finalKey;
 
 	}
 }

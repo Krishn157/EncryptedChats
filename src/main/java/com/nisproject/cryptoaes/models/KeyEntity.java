@@ -73,4 +73,10 @@ public class KeyEntity {
 		this.userId2 = userId2;
 	}
 
+	@Override
+	public String toString() {
+		return "KeyEntity [id=" + id + ", sharedKey=" + sharedKey + ", userId1=" + userId1 + ", userId2=" + userId2
+				+ "]";
+	}
+
 }

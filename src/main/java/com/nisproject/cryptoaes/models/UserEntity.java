@@ -138,4 +138,10 @@ public class UserEntity implements Serializable {
 		return serialVersionUID;
 	}
 
+	@Override
+	public String toString() {
+		return "UserEntity [id=" + id + ", userId=" + userId + ", pin=" + pin + ", encryptedPassword="
+				+ encryptedPassword + "]";
+	}
+
 }
