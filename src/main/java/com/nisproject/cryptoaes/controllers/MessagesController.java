@@ -16,9 +16,10 @@ public class MessagesController {
 	@Autowired
 	private ChatRepo chatRepo;
 
-	@GetMapping("/messages/{userId}")
-	public List<ChatEntity> getMessagesOfAUser(@PathVariable("userId") String userId) {
-		List<ChatEntity> allMsgs = chatRepo.findChatsBySenderAndRecipient(userId);
+	@GetMapping("/messages/{userId1}/{userId2}")
+	public List<ChatEntity> getMessagesOfAUser(@PathVariable("userId1") String userId1,
+			@PathVariable("userId2") String userId2) {
+		List<ChatEntity> allMsgs = chatRepo.findChatsBySenderAndRecipient(userId1, userId2);
 		return allMsgs;
 	}
 }
