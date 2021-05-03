@@ -31,7 +31,7 @@ public class ChatController {
 		UserEntity userEntityS = userRepo.findByUserId(messageRequest.getSenderId());
 		UserEntity userEntityR = userRepo.findByUserId(messageRequest.getRecipientId());
 		ChatEntity chatEntity = new ChatEntity();
-		System.out.println(messageRequest.getEncryptedmsg());
+		// System.out.println(messageRequest.getEncryptedmsg());
 		chatEntity.setMessage(messageRequest.getEncryptedmsg());
 		chatEntity.setSender(userEntityS);
 		chatEntity.setRecipient(userEntityR);
