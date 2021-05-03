@@ -27,17 +27,18 @@ public class ChatController {
 
 	@MessageMapping("/chat")
 	public void processMessage(@Payload ChatMessageRequest messageRequest) {
-//		System.out.println(messageRequest);
+		// System.out.println(messageRequest);
 		UserEntity userEntityS = userRepo.findByUserId(messageRequest.getSenderId());
 		UserEntity userEntityR = userRepo.findByUserId(messageRequest.getRecipientId());
 		ChatEntity chatEntity = new ChatEntity();
-		chatEntity.setMessage(messageRequest.getMessage());
+		System.out.println(messageRequest.getEncryptedmsg());
+		chatEntity.setMessage(messageRequest.getEncryptedmsg());
 		chatEntity.setSender(userEntityS);
 		chatEntity.setRecipient(userEntityR);
 		chatEntity.setTimestamp(messageRequest.getTimestamp());
 		chatRepo.save(chatEntity);
 		messagingTemplate.convertAndSendToUser(messageRequest.getRecipientId(), "/queue/messages", new ChatResponse(
-				messageRequest.getMessage(), messageRequest.getSenderId(), messageRequest.getTimestamp()));
+				messageRequest.getEncryptedmsg(), messageRequest.getSenderId(), messageRequest.getTimestamp()));
 	}
 
 }

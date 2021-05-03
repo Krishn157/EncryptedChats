@@ -3,33 +3,31 @@ package com.nisproject.cryptoaes.models.Request;
 import java.util.Date;
 
 public class ChatMessageRequest {
-	private String message;
+	private String encryptedmsg;
 	private String senderId;
 	private String recipientId;
 	private Date timestamp;
 
 	public ChatMessageRequest() {
-		super();
 	}
 
-	public ChatMessageRequest(String message, String senderId, String recipientId, Date timestamp) {
-		super();
-		this.message = message;
+	public ChatMessageRequest(String encryptedmsg, String senderId, String recipientId, Date timestamp) {
+		this.encryptedmsg = encryptedmsg;
 		this.senderId = senderId;
 		this.recipientId = recipientId;
 		this.timestamp = timestamp;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getEncryptedmsg() {
+		return this.encryptedmsg;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setEncryptedmsg(String encryptedmsg) {
+		this.encryptedmsg = encryptedmsg;
 	}
 
 	public String getSenderId() {
-		return senderId;
+		return this.senderId;
 	}
 
 	public void setSenderId(String senderId) {
@@ -37,7 +35,7 @@ public class ChatMessageRequest {
 	}
 
 	public String getRecipientId() {
-		return recipientId;
+		return this.recipientId;
 	}
 
 	public void setRecipientId(String recipientId) {
@@ -45,7 +43,7 @@ public class ChatMessageRequest {
 	}
 
 	public Date getTimestamp() {
-		return timestamp;
+		return this.timestamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
@@ -54,8 +52,8 @@ public class ChatMessageRequest {
 
 	@Override
 	public String toString() {
-		return "ChatMessageRequest [message=" + message + ", senderId=" + senderId + ", recipientId=" + recipientId
-				+ ", timestamp=" + timestamp + "]";
+		return "{" + " encryptedmsg='" + getEncryptedmsg() + "'" + ", senderId='" + getSenderId() + "'"
+				+ ", recipientId='" + getRecipientId() + "'" + ", timestamp='" + getTimestamp() + "'" + "}";
 	}
 
 }
